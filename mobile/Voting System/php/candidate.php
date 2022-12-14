@@ -1,5 +1,6 @@
 <?php
 include 'connection.php';
+session_start();
 if (isset($_POST['submit'])) {
     $cname = $_POST['fname'] . ' ' . $_POST['mname'] . ' ' . $_POST['lname'];
     $cno = $_POST['cno'];
@@ -41,6 +42,8 @@ if (isset($_POST['submit'])) {
     } else {
         echo "error";
     }
+    $insertpartylist = "INSERT INTO listpartylist(partylist) values ('$cpartylist')";
+    $performquery = mysqli_query($conn, $insertpartylist);
     switch ($_POST['cpositions']) {
         case 'President':
             $insertcandidate = "INSERT into president(pres_no, pres_name, votes, partylist) values ('$cno','$cname', '0', '$cpartylist')";
@@ -82,6 +85,12 @@ if (isset($_POST['submit'])) {
             echo '<p>Nope</p>';
     }
 }
+
+$partylistquery = "SELECT DISTINCT partylist FROM listpartylist";
+$result = mysqli_query($conn, $partylistquery);
+if ($result) {
+    $options = mysqli_fetch_all($result, MYSQLI_ASSOC);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -102,6 +111,19 @@ if (isset($_POST['submit'])) {
 </style>
 
 <body>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        function addlist() {
+            var addlist = document.getElementById("list"),
+                textValue = document.getElementById("addpartylist").value,
+                newPartylist = document.createElement("OPTION"),
+                newPartylistv = document.createTextNode(textValue);
+
+            newPartylist.appendChild(newPartylistv);
+            addlist.insertBefore(newPartylist, addlist.lastChild);
+            document.getElementById("addpartylist").value = "";
+        }
+    </script>
     <div class="topnav w-100 py-0 px-0">
         <div class="row pt-2 mt-3 g-0">
             <div class="col-1 d-flex justify-content-end">
@@ -112,19 +134,21 @@ if (isset($_POST['submit'])) {
                     <h4>College of Information Communication and Technology Admin Portal</h3>
             </div>
             <div class="col-2 d-flex align-items-center justify-content-center px-0">
-                <div class="col-2"><h3 class="adminname mx-0 my-0"><?php echo $_SESSION['adminuser']; ?></h3></div>
-                <div class="col-3">
-                <div class="adminlogo mx-0 my-0">
-                    <img src="" alt="" class="logo">
+                <div class="col-2">
+                    <h3 class="adminname mx-0 my-0"><?php echo $_SESSION['adminuser']; ?></h3>
                 </div>
+                <div class="col-3">
+                    <div class="adminlogo mx-0 my-0">
+                        <img src="" alt="" class="logo">
+                    </div>
                 </div>
             </div>
         </div>
         <div class="row flex-row g-0">
             <ul class="d-flex justify-content-around my-0 mx-0">
-            <li><a href="dashboard.php">Dashboard</a></li>
-            <li><a href="voter.php">Voters List</a></li>
-            <li class="act"><button class="actbtn">Candidate</button></li>
+                <li><a href="dashboard.php" style="text-decoration: none; color: black">Dashboard</a></li>
+                <li><a href="voter.php" style="text-decoration: none; color: black">Voter's List</a></li>
+                <li class="act"><button class="actbtn">Candidates</button></li>
             </ul>
         </div>
     </div>
@@ -138,43 +162,44 @@ if (isset($_POST['submit'])) {
 
     </div>
 
-    <div class="dashboard-voter">
-        <div class="list">
-            <div class="toplist">
-                <div class="row">
-                    <div class="col">
-                        <input type="text" placeholder="ex: xx-xxxxx" class="d-flex justify-content-start mx-3 ">
-                    </div>
-                    <div class="col d-flex justify-content-end">
-                        <button class="btn btn-sm mx-2 px-5" id="a">Find</button>
-                        <button class="btn btn-sm mx-2 px-5" id="b">Sort</button>
-                        <button type="button" class="btn btn-sm mx-2 px-5 " id="c" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                            Add
-                        </button>
+    <div class="row g-0 d-flex justify-content-center">
+        <div class="col-7">
+            <div class="list">
+                <div class="toplist">
+                    <div class="row">
+                        <div class="col">
+                            <input type="text" placeholder="ex: xx-xxxxx" class="d-flex justify-content-start mx-3 ">
+                        </div>
+                        <div class="col d-flex justify-content-end">
+                            <button class="btn btn-sm mx-2 px-5" id="a">Find</button>
+                            <button class="btn btn-sm mx-2 px-5" id="b">Sort</button>
+                            <button type="button" class="btn btn-sm mx-2 px-5 " id="c" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                Add
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="tablelist table-responsive">
-                <table class="table table-hover table-striped">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Student Number</th>
-                            <th>Age</th>
-                            <th>Gender</th>
-                            <th>Course</th>
-                            <th>Position</th>
-                            <th>Partylist</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        include 'connection.php';
-                        $filltable = "SELECT * FROM candidate";
-                        $fill = mysqli_query($conn, $filltable);
-                        while ($getrow = mysqli_fetch_array($fill)) {
-                            echo '
+                <div class="tablelist table-responsive">
+                    <table class="table table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Student Number</th>
+                                <th>Age</th>
+                                <th>Gender</th>
+                                <th>Course</th>
+                                <th>Position</th>
+                                <th>Partylist</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            include 'connection.php';
+                            $filltable = "SELECT * FROM candidate";
+                            $fill = mysqli_query($conn, $filltable);
+                            while ($getrow = mysqli_fetch_array($fill)) {
+                                echo '
                                 <tr>
                                     <td>' . $getrow["candidatename"] . '</td>
                                     <td>' . $getrow["candidatestudentnumber"] . '</td>
@@ -185,10 +210,76 @@ if (isset($_POST['submit'])) {
                                     <td>' . $getrow["candidatepartylist"] . '</td>
                                 </tr>
                                 ';
+                            }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-4 my-3 px-1">
+            <div class="vgraph">
+                <form method="post">
+                    <select class="form-select" name="list" id="">
+                        <option value="" disabled selected>Select partylist</option>
+                        <?php
+                        foreach ($options as $option) {
+                        ?>
+                            <option value="<?php echo $option['partylist']; ?>"><?php echo $option['partylist']; ?></option>
+                        <?php
                         }
                         ?>
-                    </tbody>
-                </table>
+                    </select>
+                </form>
+                <canvas id="partylist" width="20%" height="20%"></canvas>
+                <script>
+                    const partylistlabel = ['President',
+                        'Vice President - Internal',
+                        'Vice President - External',
+                        'General Secretary',
+                        'Deputy Secretary',
+                        'Treasurer',
+                        'Auditor',
+                        'Public Information Officer - Male',
+                        'Public Information Officer - Female'
+                    ];
+                    const data = {
+                        labels: partylistlabel,
+                        datasets: [{
+                            axis: 'y',
+                            label: 'asd',
+                            data: [10, 20, 30, 40, 50, 60, 70],
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(255, 159, 64, 0.2)',
+                                'rgba(255, 205, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)'
+
+                            ],
+                            borderColor: [
+                                'rgb(255, 99, 132)',
+                                'rgb(255, 159, 64)',
+                                'rgb(255, 205, 86)',
+                                'rgb(75, 192, 192)',
+                                'rgb(54, 162, 235)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    };
+                    const config = {
+                        type: 'bar',
+                        data: data,
+                        options: {
+                            indexAxis: 'y',
+                            scales: {
+                                x: {
+                                    beginAtZero: true
+                                }
+                            }
+                        },
+                    };
+                    const cookiechart = new Chart(document.getElementById('partylist'), config);
+                </script>
             </div>
         </div>
     </div>
@@ -241,10 +332,28 @@ if (isset($_POST['submit'])) {
                                 <option value="Public Information Officer - Male">Public Information Officer - Male</option>
                                 <option value="Public Information Officer - Female">Public Information Officer - Female</option>
                             </select>
-
-                            <label class="form-label">Partylist</label>
-                            <input type="text" class="form-control" name="cpartylist" required>
-
+                            <div class="row g-0 justify-content-between">
+                                <div class="col-5">
+                                    <label class="form-label">Partylist</label>
+                                    <select class="form-select" name="cpartylist" id="list" required>
+                                        <option value="" disabled selected>Select partylist</option>
+                                        <?php
+                                        foreach ($options as $option) {
+                                        ?>
+                                            <option value="<?php echo $option['partylist']; ?>"><?php echo $option['partylist']; ?></option>
+                                        <?php
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                                <div class="col-4">
+                                    <label class="form-label">Add Partylist</label>
+                                    <input type="text" class="form-control" name="addpartylist" id="addpartylist">
+                                </div>
+                                <div class="col-2 d-flex align-self-end">
+                                    <button type="button" class="btn btn-primary" onclick="addlist();" formnovalidate>Add Partylist</button>
+                                </div>
+                            </div>
                             <label class="form-label">Upload Picture</label>
                             <input class="form-control" type="file" name="my_file" required>
                         </div>
@@ -259,6 +368,7 @@ if (isset($_POST['submit'])) {
             </form>
         </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>

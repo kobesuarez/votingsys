@@ -42,8 +42,8 @@ if (!isset($_SESSION['adminuser']) || !isset($_SESSION['adminpass'])) {
         <div class="row flex-row g-0">
             <ul class="d-flex justify-content-around my-0 mx-0">
                 <li class="act"><button class="actbtn">Dashboard</button></li>
-                <li><a href="voter.php">Voters List</a></li>
-                <li><a href="candidate.php">Candidates</a></li>
+                <li><a href="voter.php" style="text-decoration: none; color: black">Voter's List</a></li>
+                <li><a href="candidate.php" style="text-decoration: none; color: black">Candidates</a></li>
             </ul>
         </div>
     </div>

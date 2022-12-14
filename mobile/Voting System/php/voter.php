@@ -54,9 +54,9 @@ $yearlevel = array();
         </div>
         <div class="row flex-row g-0">
             <ul class="d-flex justify-content-around my-0 mx-0">
-                <li><a href="dashboard.php">Dashboard</a></li>
+                <li><a href="dashboard.php" style="text-decoration: none; color: black">Dashboard</a></li>
                 <li class="act"><button class="actbtn">Voter's List</button></li>
-                <li><a href="candidate.php">Candidates</a></li>
+                <li><a href="candidate.php" style="text-decoration: none; color: black">Candidates</a></li>
             </ul>
         </div>
     </div>
@@ -119,7 +119,7 @@ $yearlevel = array();
         </div>
         <div class="col-2 my-3 px-0">
             <div class="vgraph">
-                <canvas id="yearlevelchart" width="20%" height="50%"></canvas>
+                <canvas id="yearlevelchart" width="50%" height="100%"></canvas>
                 <script>
                     const year1 = <?php echo json_encode($year1row);  ?>;
                     const year2 = <?php echo json_encode($year2row);  ?>;
@@ -136,7 +136,7 @@ $yearlevel = array();
                                 'rgba(255, 159, 64, 0.2)',
                                 'rgba(255, 205, 86, 0.2)',
                                 'rgba(75, 192, 192, 0.2)'
-          
+
                             ],
                             borderColor: [
                                 'rgb(255, 99, 132)',

@@ -28,8 +28,12 @@ if (!session_start()) {
         header('Location: dashboard.php');
         exit;
     }
+    if (isset($_SESSION['stno'])) {
+    } else {
+        header('Location: dashboard.php');
+        exit;
+    }
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -44,18 +48,44 @@ if (!session_start()) {
 </head>
 
 <body>
-    <div class="top">
-        <div class="logo">
-            <img src="/src/cict.png" class="icon">
+    <script>
+        function toggleMobileMenu(menu) {
+            menu.classList.toggle('open');
+        }
+    </script>
+    <header>
+        <div class="top g-0 py-0">
+            <div class="logo">
+                <img src="/src/cict.png" class="icon">
+            </div>
+            <div class="name">
+                <p class="schoolname">Taguig City University</p>
+                <p class="webname">Computer Science Voting Portal</p>
+            </div>
+            <div id="hamburger-icon" onclick="toggleMobileMenu(this)">
+                <div class="bar1"></div>
+                <div class="bar2"></div>
+                <div class="bar3"></div>
+                <ul class="mobile-menu">
+                    <li><a href="dashboard.php">Home</a></li>
+                    <li><a href="president.php">President</a></li>
+                    <li><a href="vpresi.php">VP - Internal</a></li>
+                    <li><a href="vprese.php">VP - External</a></li>
+                    <li><a href="gensec.php">General Secretary</a></li>
+                    <li><a href="depsec.php">Deputy Secretary</a></li>
+                    <li><a href="trea.php">Treasurer</a></li>
+                    <li><a href="audi.php">Auditor</a></li>
+                    <li><a href="piom.php">PIO - Male</a></li>
+                    <li><a href="piof.php">PIO - Female</a></li>
+                    <li><a href="report.php">Report</a></li>
+                    <li><a href="">Voter's Count</a></li>
+                    <li><a href="studentsettings.php">Settings</a></li>
+                    <li><a href="logout.php">Logout</a></li>
+                </ul>
+            </div>
         </div>
-        <div class="name">
-            <p class="schoolname">Taguig City University</p>
-            <p class="webname">Computer Science Voting Portal</p>
-        </div>
-        <div class="drop">
 
-        </div>
-    </div><br>
+    </header><br>
     <div>
         <?php
         include('connection.php');
@@ -68,18 +98,18 @@ if (!session_start()) {
             $cpartylist = $getrow["candidatepartylist"];
             $imageurl = $getrow["candidatepicture"];
             echo    '<form method = "post">
-            <div class="row pb-3 ml-4 mr-0">
-                    <div class="col-6 card text-center" style="width: 18rem;">
-                            <img src="src/candidate/Public Information Officer - Female/' . $imageurl . '" class="card-img-top py-3 rounded-circle" alt="...">
-                             <div class="card-body py-0 px-0">
-                                <p class="card-text">' . $cname . '</p>
-                                <p class="text-secondary">' . $cpos . '</p>
-                                <p class="text-secondary">' . $cpartylist . '</p>
-                                <button class="btn btn-primary mb-2" type="submit" name = "votepiof" value = "' . $cstno . '" >Vote ' . $cname . ' </button>
+                        <div class="row pb-3 ml-4 mr-0">
+                            <div class="col-11 card text-center" style="width: 18rem;">
+                                    <img src="src/candidate/Public Information Officer - Female/' . $imageurl . '" class="card-img-top py-3 rounded-circle" alt="...">
+                                    <div class="card-body-lg py-0 px-0">
+                                        <p class="card-text">' . $cname . '</p>
+                                        <p class="text-secondary">' . $cpos . '</p>
+                                        <p class="text-secondary">' . $cpartylist . '</p>
+                                        <button class="btn btn-primary mb-2" type="submit" name = "voteaudi" value = "' . $cstno . '" >Vote ' . $cname . ' </button>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </form>';
+                        </form>';
         }
         ?>
     </div>

@@ -35,7 +35,9 @@ li {
   list-style-type: none;
   text-align: center;
 }
-.dashboardbtn, .voterbtn, .candidatebtn{
+.dashboardbtn,
+.voterbtn,
+.candidatebtn {
   background-color: transparent;
   border: none;
 }
@@ -64,17 +66,24 @@ ul {
   justify-content: center;
   align-items: center;
 }
+.vgraph {
+  background-color: #ededed;
+  height: 76vh;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
 .list {
   border-radius: 15px;
-  margin: 20px 20px 20px 20px;
+  margin: 15px 20px 20px 20px;
   padding: 20px 20px 20px 10px;
   height: 76vh;
   width: 55vw;
   background-color: #ededed;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
-#a, #b, #c{
-  background-color: #3273FF;
+#a,
+#b,
+#c {
+  background-color: #3273ff;
   color: white;
 }
 .partygraph {
@@ -92,17 +101,17 @@ ul {
   height: 65vh;
   width: 53vw;
 }
-a{
+a {
   text-decoration: none;
   color: white;
 }
-.act{
+.act {
   padding: 0 0 0 0;
   margin: 0 0 0 0;
   background-color: white;
   border: 10px solid white;
 }
-.actbtn{
+.actbtn {
   padding: 0 0 0 0;
   margin: 0 0 0 0;
   background-color: transparent;
