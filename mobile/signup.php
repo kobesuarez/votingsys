@@ -29,7 +29,7 @@ if (strcmp($password, $cpassword) == 0) {
         $insertquery = "insert into studentlist(studentname, studentnumber, studentemail, studentyear, studentsection, studentcontactnumber, studentpassword) values ('$sname', '$sno', '$smail', '$syear', '$ssection', '$scno', '$spassword')";
         $performquery = mysqli_query($conn, $insertquery);
         if ($performquery) {
-            $vinsertquery = "insert into studentvote(sno, votedpres, votedvpresi, votedvprese, votedgs, votedds, votedtrea, votedaudi, votedpiom, votedpiof) values ('$sno', '$votingstatus', '$votingstatus', '$votingstatus', '$votingstatus', '$votingstatus', '$votingstatus', '$votingstatus', '$votingstatus', '$votingstatus')";
+            $vinsertquery = "insert into studentvote(sno, votedpres, votedvpresi, votedvprese, votedgs, votedds, votedtrea, votedaudi, votedpiom, votedpiof, vstatus) values ('$sno', '$votingstatus', '$votingstatus', '$votingstatus', '$votingstatus', '$votingstatus', '$votingstatus', '$votingstatus', '$votingstatus', '$votingstatus', 'Unvoted')";
             $vperformquery = mysqli_query($conn, $vinsertquery);
             if ($vperformquery) {
                 echo "form updated";

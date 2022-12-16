@@ -47,16 +47,11 @@ if ($_POST) {
                     <input type="text" name="username" id="logintext">
                     <p class="pword">Password</p>
                     <input type="password" name="password" id="password"> <br>
-                    <div class="save">
-                        <input type="checkbox">
-                        <p>Remember Me</p>
-                    </div>
+                    <br>
                     <input type="submit" id="login" value="Log In">
                 </form>
 
             </div>
-
-            <p>Forgot Password</p>
         </div>
         <div class="logo">
             <img src="/src/tcu.png" class="imglogo">

@@ -1,6 +1,6 @@
 <?php
 include('connection.php');
-
+include('status.php');
 if (!session_start()) {
     session_start();
 } else {

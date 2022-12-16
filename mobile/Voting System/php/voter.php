@@ -1,5 +1,9 @@
 <?php
 include 'connection.php';
+if (!isset($_SESSION['adminuser']) || !isset($_SESSION['adminpass'])) {
+    header('Location: admin.php');
+    exit;
+}
 $year1 = "SELECT * from studentlist WHERE studentyear = '1st Year'";
 $year2 = "SELECT * from studentlist WHERE studentyear = '2nd Year'";
 $year3 = "SELECT * from studentlist WHERE studentyear = '3rd Year'";
@@ -16,7 +20,6 @@ if ($result = mysqli_query($conn, $year3)) {
 if ($result = mysqli_query($conn, $year4)) {
     $year4row = mysqli_num_rows($result);
 }
-$yearlevel = array();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -38,8 +41,8 @@ $yearlevel = array();
                 <img src="/src//cict.png" class="img">
             </div>
             <div class="col-9 px-0">
-                <h2>Taguig City University</h1>
-                    <h4>College of Information Communication and Technology Admin Portal</h3>
+                <h2>Taguig City University</h2>
+                <h4>College of Information Communication and Technology Admin Portal</h4>
             </div>
             <div class="col-2 d-flex align-items-center justify-content-center px-0">
                 <div class="col-2">
@@ -61,13 +64,6 @@ $yearlevel = array();
         </div>
     </div>
 
-    <div class="title">
-        <p>
-
-        </p>
-    </div>
-
-    </div>
     <div class="row g-0 d-flex justify-content-center">
         <div class="col-7 px-0">
             <div class="list py-3 px-3 my-3 mx-3">

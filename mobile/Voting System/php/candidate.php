@@ -1,6 +1,55 @@
 <?php
 include 'connection.php';
 session_start();
+if (!isset($_SESSION['adminuser']) || !isset($_SESSION['adminpass'])) {
+    header('Location: admin.php');
+    exit;
+}
+$selectquery = "select MAX(votes) from president";
+$res = mysqli_query($conn, $selectquery);
+$data = mysqli_fetch_array($res);
+$cpresvote = $data['MAX(votes)'];
+
+$selectquery = "select MAX(votes) from vpresi";
+$res = mysqli_query($conn, $selectquery);
+$data = mysqli_fetch_array($res);
+$cvpresivote = $data['MAX(votes)'];
+
+$selectquery = "select MAX(votes) from vprese";
+$res = mysqli_query($conn, $selectquery);
+$data = mysqli_fetch_array($res);
+$cvpresevote = $data['MAX(votes)'];
+
+$selectquery = "select MAX(votes) from gensec";
+$res = mysqli_query($conn, $selectquery);
+$data = mysqli_fetch_array($res);
+$cgensecvote = $data['MAX(votes)'];
+
+$selectquery = "select MAX(votes) from depsec";
+$res = mysqli_query($conn, $selectquery);
+$data = mysqli_fetch_array($res);
+$cdepsecvote = $data['MAX(votes)'];
+
+$selectquery = "select MAX(votes) from trea";
+$res = mysqli_query($conn, $selectquery);
+$data = mysqli_fetch_array($res);
+$ctreavote = $data['MAX(votes)'];
+
+$selectquery = "select MAX(votes) from audi";
+$res = mysqli_query($conn, $selectquery);
+$data = mysqli_fetch_array($res);
+$caudivote = $data['MAX(votes)'];
+
+$selectquery = "select MAX(votes) from piom";
+$res = mysqli_query($conn, $selectquery);
+$data = mysqli_fetch_array($res);
+$cpiomvote = $data['MAX(votes)'];
+
+$selectquery = "select MAX(votes) from piof";
+$res = mysqli_query($conn, $selectquery);
+$data = mysqli_fetch_array($res);
+$cpiofvote = $data['MAX(votes)'];
+
 if (isset($_POST['submit'])) {
     $cname = $_POST['fname'] . ' ' . $_POST['mname'] . ' ' . $_POST['lname'];
     $cno = $_POST['cno'];
@@ -91,6 +140,7 @@ $result = mysqli_query($conn, $partylistquery);
 if ($result) {
     $options = mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -114,14 +164,17 @@ if ($result) {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         function addlist() {
-            var addlist = document.getElementById("list"),
-                textValue = document.getElementById("addpartylist").value,
-                newPartylist = document.createElement("OPTION"),
-                newPartylistv = document.createTextNode(textValue);
+            var plist = document.getElementById("addpartylist").value;
+            if (confirm("Are you sure to add " + plist + "?")) {
+                var addlist = document.getElementById("list"),
+                    textValue = document.getElementById("addpartylist").value,
+                    newPartylist = document.createElement("OPTION"),
+                    newPartylistv = document.createTextNode(textValue);
 
-            newPartylist.appendChild(newPartylistv);
-            addlist.insertBefore(newPartylist, addlist.lastChild);
-            document.getElementById("addpartylist").value = "";
+                newPartylist.appendChild(newPartylistv);
+                addlist.insertBefore(newPartylist, addlist.lastChild);
+                document.getElementById("addpartylist").value = "";
+            }
         }
     </script>
     <div class="topnav w-100 py-0 px-0">
@@ -130,12 +183,12 @@ if ($result) {
                 <img src="/src//cict.png" class="img">
             </div>
             <div class="col-9 px-0">
-                <h2>Taguig City University</h1>
-                    <h4>College of Information Communication and Technology Admin Portal</h3>
+                <h2>Taguig City University</h2>
+                <h4>College of Information Communication and Technology Admin Portal</h4>
             </div>
             <div class="col-2 d-flex align-items-center justify-content-center px-0">
                 <div class="col-2">
-                    <h3 class="adminname mx-0 my-0"><?php echo $_SESSION['adminuser']; ?></h3>
+                    <h3 class="adminname mx-0 my-0">Admin</h3>
                 </div>
                 <div class="col-3">
                     <div class="adminlogo mx-0 my-0">
@@ -152,8 +205,6 @@ if ($result) {
             </ul>
         </div>
     </div>
-
-
     <div class="title">
         <p>
 
@@ -161,7 +212,6 @@ if ($result) {
     </div>
 
     </div>
-
     <div class="row g-0 d-flex justify-content-center">
         <div class="col-7">
             <div class="list">
@@ -219,67 +269,7 @@ if ($result) {
         </div>
         <div class="col-4 my-3 px-1">
             <div class="vgraph">
-                <form method="post">
-                    <select class="form-select" name="list" id="">
-                        <option value="" disabled selected>Select partylist</option>
-                        <?php
-                        foreach ($options as $option) {
-                        ?>
-                            <option value="<?php echo $option['partylist']; ?>"><?php echo $option['partylist']; ?></option>
-                        <?php
-                        }
-                        ?>
-                    </select>
-                </form>
                 <canvas id="partylist" width="20%" height="20%"></canvas>
-                <script>
-                    const partylistlabel = ['President',
-                        'Vice President - Internal',
-                        'Vice President - External',
-                        'General Secretary',
-                        'Deputy Secretary',
-                        'Treasurer',
-                        'Auditor',
-                        'Public Information Officer - Male',
-                        'Public Information Officer - Female'
-                    ];
-                    const data = {
-                        labels: partylistlabel,
-                        datasets: [{
-                            axis: 'y',
-                            label: 'asd',
-                            data: [10, 20, 30, 40, 50, 60, 70],
-                            backgroundColor: [
-                                'rgba(255, 99, 132, 0.2)',
-                                'rgba(255, 159, 64, 0.2)',
-                                'rgba(255, 205, 86, 0.2)',
-                                'rgba(75, 192, 192, 0.2)'
-
-                            ],
-                            borderColor: [
-                                'rgb(255, 99, 132)',
-                                'rgb(255, 159, 64)',
-                                'rgb(255, 205, 86)',
-                                'rgb(75, 192, 192)',
-                                'rgb(54, 162, 235)'
-                            ],
-                            borderWidth: 1
-                        }]
-                    };
-                    const config = {
-                        type: 'bar',
-                        data: data,
-                        options: {
-                            indexAxis: 'y',
-                            scales: {
-                                x: {
-                                    beginAtZero: true
-                                }
-                            }
-                        },
-                    };
-                    const cookiechart = new Chart(document.getElementById('partylist'), config);
-                </script>
             </div>
         </div>
     </div>
@@ -361,7 +351,7 @@ if ($result) {
                     </div>
                     <div class="modal-footer">
                         <button>Apply</button>
-                        <button type="submit" name="submit" data-bs-dismiss="modal">Save</button><br>
+                        <button type="submit" name="submit" data-bs-dismiss="modal">Save</button></br>
                         <button>Cancel</button>
                     </div>
                 </div>
@@ -372,6 +362,70 @@ if ($result) {
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    <script>
+        const presvote = <?php echo json_encode($cpresvote);  ?>;
+        const vpresivote = <?php echo json_encode($cvpresivote);  ?>;
+        const vpresevote = <?php echo json_encode($cvpresevote);  ?>;
+        const gensecvote = <?php echo json_encode($cgensecvote);  ?>;
+        const depsecvote = <?php echo json_encode($cdepsecvote);  ?>;
+        const treavote = <?php echo json_encode($ctreavote);  ?>;
+        const audivote = <?php echo json_encode($caudivote);  ?>;
+        const piomvote = <?php echo json_encode($cpiomvote);  ?>;
+        const piofvote = <?php echo json_encode($cpiofvote);  ?>;
+        const data = {
+            labels: ['President', 'VP - Internal', 'VP - External', 'Gen. Sec.', 'Dep. Sec.', 'Treasurer', 'Auditor', 'PIO - Male', 'PIO - Female'],
+            datasets: [{
+                axis: 'y',
+                label: 'Leading Votes per Position',
+                data: [presvote, vpresivote, vpresevote, gensecvote, depsecvote, treavote, audivote, piomvote, piofvote],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(255, 205, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(93, 155, 155, 0.2)',
+                    'rgba(100, 107, 099, 0.2)',
+                    'rgba(239, 169, 074, 0.2)',
+                    'rgba(037, 041, 074, 0.2)',
+                    'rgba(214, 174, 001, 0.2)'
+                ],
+                borderColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(255, 159, 64)',
+                    'rgb(255, 205, 86)',
+                    'rgb(75, 192, 192)',
+                    'rgb(089, 035, 033)',
+                    'rgb(096, 111, 140)',
+                    'rgb(193, 135, 107)',
+                    'rgb(037, 041, 074)',
+                    'rgb(091, 058, 041)'
+                ],
+                borderWidth: 1
+            }]
+        };
+        const config = {
+            type: 'bar',
+            data: data,
+            options: {
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                        beginAtZero: true
+                    }
+                }
+            },
+        };
+        const partylistbar = new Chart(document.getElementById('partylist'), config);
+
+        function updatechart(option) {
+            partylistbar.data.datasets[0].label = option.value;
+
+            partylistbar.update();
+            var plist = option.value;
+            document.cookie = "picked = " + plist;
+        }
+    </script>
 </body>
+
 
 </html>
